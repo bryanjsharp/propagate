@@ -1,22 +1,15 @@
 #! /usr/bin/env python
 
 import SocketServer
-
-class TCPHandler(SocketServer.BaseRequestHandler):
-
-    def handle(self):
-        #file stuff
-        filename = "test.torrent"
-        f = open(filename, "rb")
-        file = f.read(1024)
-        while (file):
-            self.request.send(file)
-            print ('Sent ', repr(file))
-            file = f.read(1024)
-        f.close()
+import SimpleHTTPServer
 
 
+Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+Handler.extensions_map.update({
+    '.webapp': 'application/x-web-app-manifest+json',
+});
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 9999
-    server = SocketServer.TCPServer((HOST, PORT), TCPHandler)
-    server.serve_forever()
+    HOST, PORT = "127.0.0.1", 9999
+    httpd = SocketServer.TCPServer(("", PORT), Handler)
+    print "Serving at port", PORT
+    httpd.serve_forever()

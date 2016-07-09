@@ -1,13 +1,20 @@
 #! /usr/bin/env python
 
+import os
 import socket
 import libtorrent as lt
 import time
+import urllib2
 
 BUFF = 1024
 host = "127.0.0.1"
 port = 9999
 torrentName = "recv.torrent"
+
+def download_torrent_file(url):
+    try:
+        file = urlopen(url)
+        print "downloading " + url
 
 def receive_torrent_file():
     with open(torrentName, 'wb') as f:
